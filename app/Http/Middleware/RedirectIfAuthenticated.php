@@ -27,11 +27,10 @@ class RedirectIfAuthenticated
             }
         } */
         
-            if( Auth::check() )
-                {
-                // if user take him to his dashboard
-               
-            if ( Auth::user()->isUser() ) {
+         if( Auth::check() ) {
+                
+            // if user is not admin take him to his dashboard   
+            if ( $request->user()->isUser() ) {
                     return $next($request);
             }
             abort(403);

@@ -18,26 +18,14 @@ class CheckIfAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if( Auth::check() )
-        {
-            // if user is not admin take him to his dashboard
-            // if ( Auth::user()->isUser() ) {
-            //      return redirect(route('home'));
-            // }
-
+        if( Auth::check() ) {
             // allow admin to proceed with request
-             if ( Auth::user()->isAdmin() ) {
+             if ( $request->user()->isAdmin() ) {
                  
                 return $next($request);
             }
             
-            abort(403);
-
-           
+            abort(403);        
         }
-
-     
-            
-        
     }
 }
