@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-
-class CheckIfAdmin
+class UserAuthenticated
 {
     /**
      * Handle an incoming request.
@@ -20,18 +19,19 @@ class CheckIfAdmin
     {
         if( Auth::check() ) {
 
-        //     // if user is not admin take him to his dashboard
-        //     if ( $request->user()->isUser() ) {
-        //         return redirect(route('home'));
-        //    }
+            // // if user is admin take user admin to his dashboard
+            // if ( $request->user()->isAdmin() ) {
+            //     return redirect(route('admin'));
+            //  }
 
-            // allow admin to proceed with request and prevent user access
-             if ( $request->user()->isAdmin() ) {
-                 
+            // allow user to proceed with request and prevent admin user access to user page
+            if ( $request->user()->isUser() ) {
+                
                 return $next($request);
             }
             
             abort(403);        
         }
+
     }
 }
