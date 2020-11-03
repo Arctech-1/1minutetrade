@@ -17,15 +17,27 @@ use GuzzleHttp\Psr7\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
-
+// Route::get('/', function () {
+//     return view('');
+// });
 
 
 Auth::routes(['verify' => true]);
 
-Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+Route::get('/', function () {
+    return view('auth.login');
+});
+
+/* User Routes */
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+/* Admin Routes */
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+
+
+
 
