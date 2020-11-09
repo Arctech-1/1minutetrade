@@ -50,4 +50,16 @@ class User extends Authenticatable implements MustVerifyEmail, AuthenticatableCo
     {
         return $this->role ==='user';
     }
+
+    /* Relationship Function to retrieve data from bank details model  */
+    public function bankDetails()
+    {
+        return $this->hasMany(BankDetail::class);
+    }
+
+    /* Relationship Function to retrieve data from transactions model  */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

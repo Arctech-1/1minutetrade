@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script> --}}
 
   
 
@@ -42,11 +42,14 @@
                 </a>  --}}
             </div>
             <div class="w-1/2 pr-0">
-                <div class="flex relative inline-block float-right">
 
-                    <div class="relative text-sm">
+                <div class="flex relative inline-block float-right">
+                    
+                    <div class="relative text-sm">     
+                         
                         <button id="userButton" class="flex items-center focus:outline-none mr-3">
-                            <img class="w-8 h-8 rounded-full mr-4" src="" alt="Avatar of User"> <span class="hidden md:inline-block"> {{Auth::user()->name }} </span>
+                            <span class=" md:inline-block mr-3 text-green-600"> ₦{{Auth::user()->account_balance}}</span>                  
+                            <img class="w-8 h-8 rounded-full mr-4" src="{{ asset('images/avatar_user.png') }}" alt=""> <span class="hidden md:inline-block"> {{Auth::user()->name }} </span>
                             <svg class="pl-2 h-2" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                                 <g>
                                     <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" />
@@ -88,27 +91,27 @@
             <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white z-20" id="nav-content">
                 <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('home')}}" class="block py-1 md:py-3 pl-1 align-middle text-orange-dark no-underline hover:text-black border-b-2 border-orange-dark hover:border-orange-dark">
+                        <a href="{{ route('home') }}" class="block py-1 md:py-3 pl-1 align-middle text-orange-dark no-underline hover:text-black border-b-2 border-orange-dark hover:border-orange-dark">
                             <i class="fas fa-home fa-fw mr-3 text-orange-dark"></i><span class="pb-1 md:pb-0 text-sm">Dashboard</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-pink">
+                        <a href="{{ route('income') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-pink">
                             <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Income History</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-purple">
+                        <a href="{{ route('outcome') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-purple">
                             <i class="fa fa-envelope fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Outcome History</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-green">
+                        <a href="{{ route('apply') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-green">
                             <i class="fas fa-chart-area fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Apply History</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-red">
+                        <a href="{{route('bankdetail.index')}}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-black border-b-2 border-white hover:border-red">
                             <i class="fa fa-wallet fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Bank Details</span>
                         </a>
                     </li>
@@ -152,11 +155,11 @@
         <div class="container max-w-md mx-auto flex py-8">
 
             <div class="w-full mx-auto flex flex-wrap">
-                <div class="flex w-full md:w-1/2 ">
+                <div class="flex w-full md:w-1/1 ">
                     <div class="px-8">
-                        <h3 class="font-bold text-black">About</h3>
+                        <p class="font-normal text-gray-600 text-sm">© All rights reserved. 1minuteTrade</p>
                         <p class="py-4 text-grey-dark text-sm">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel mi ut felis tempus commodo nec id erat. Suspendisse consectetur dapibus velit ut lacinia.
+                            
                         </p>
                     </div>
                 </div>
