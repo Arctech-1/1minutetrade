@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'admin', 'verified']);
-        
+
     }
 
     /**
@@ -23,8 +24,11 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        return view('admin.dashboard');
+        $stat = $user->withCount('transactions')->where('role', 'user')->get();
+
+        return view('admin.home', ['stat' => $stat]);
+
     }
 }

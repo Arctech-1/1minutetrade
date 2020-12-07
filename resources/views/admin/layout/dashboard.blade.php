@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script> --}}
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
 
 
 </head>
@@ -48,7 +48,7 @@
                     <div class="relative text-sm">
 
                         <button id="userButton" class="flex items-center focus:outline-none mr-3">
-                            <span class=" md:inline-block mr-3 text-green-800 font-bold"> ₦{{Auth::user()->account_balance}}</span>
+                            {{-- <span class=" md:inline-block mr-3 text-green-600"> ₦{{Auth::user()->account_balance}}</span>                   --}}
                             <img class="w-8 h-8 rounded-full mr-4" src="{{ asset('images/profile') }}/{{Auth::user()->profile_photo_path }}" alt=""> <span class="hidden md:inline-block"> {{Auth::user()->name }} </span>
                             <svg class="pl-2 h-2" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
                                 <g>
@@ -58,7 +58,7 @@
                         </button>
                         <div id="userMenu" class="bg-white rounded shadow-md mt-2 absolute mt-12 pin-t pin-r min-w-full overflow-auto z-30 invisible">
                             <ul class="list-reset">
-                                <li><a href="{{ route('profile.edit', Auth::user()->id) }}" class="px-4 py-2 block text-black hover:bg-grey-light no-underline hover:no-underline">Profile</a></li>
+                                <li><a href="{{ route('admin.profile', Auth::user()->id) }}" class="px-4 py-2 block text-black hover:bg-grey-light no-underline hover:no-underline">Profile</a></li>
                                 {{-- <li><a href="#" class="px-4 py-2 block text-black hover:bg-grey-light no-underline hover:no-underline">Notifications</a></li> --}}
                                 <li>
                                     <hr class="border-t mx-2 border-grey-light">
@@ -91,41 +91,31 @@
             <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white z-20" id="nav-content">
                 <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('home') }}" class=" {{ request()->has('/')}} block py-1 md:py-3 pl-1 align-middle text-orange-dark no-underline hover:text-purple-400 {{ request()->is('home') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
+                        <a href="{{ route('admin') }}" class="block py-1 md:py-3 pl-1 align-middle text-orange-dark no-underline hover:text-purple-400 {{ request()->is('admin') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
                             <i class="fas fa-home fa-fw mr-3 text-orange-dark"></i><span class="pb-1 md:pb-0 text-sm">Dashboard</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('income') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline  hover:text-purple-400 {{ request()->is('income') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
-                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Income History</span>
+                        <a href="{{ route('users.index') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-purple-400 {{ request()->is('admin/users') ? 'border-b-2 border-orange-dark text-purple-300' : '' }} hover:border-orange-dark">
+                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Users</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('outcome') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline  hover:text-purple-400 {{ request()->is('outcome') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
-                            <i class="fa fa-envelope fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Outcome History</span>
+                        <a href="{{ route('transactions.index') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-purple-400 {{ request()->is('admin/transactions') ? 'border-b-2 border-orange-dark text-purple-300' : '' }} hover:border-orange-dark">
+                            <i class="fa fa-chart-area fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Transactions</span>
                         </a>
                     </li>
                     <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('apply') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-purple-400 {{ request()->is('apply') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
-                            <i class="fas fa-chart-area fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Apply History</span>
+                        <a href="{{ route('withdrawal.request') }}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline hover:text-purple-400 {{ request()->is('admin/withdrawal-requests') ? 'border-b-2 border-orange-dark text-purple-300' : '' }} hover:border-orange-dark">
+                            <i class="fas fa-envelope fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm"> Withdrawal Requests </span>
                         </a>
                     </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="{{route('bankdetail.index')}}" class="block py-1 md:py-3 pl-1 align-middle text-grey no-underline  hover:text-purple-400 {{ request()->is('bankdetail') ? 'border-b-2 border-orange-dark text-purple-300' : '' }}  hover:border-orange-dark ">
-                            <i class="fa fa-wallet fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Bank Details</span>
-                        </a>
-                    </li>
+
                 </ul>
 
-                {{-- Deactivating search bar --}}
-                {{-- <div class="relative pull-right pl-4 pr-4 md:pr-0">
-                    <input type="search" placeholder="Search" class="w-full bg-grey-lightest text-sm text-grey-darkest transition border focus:outline-none focus:border-grey-darker rounded py-1 px-2 pl-10 appearance-none leading-normal">
-                    <div class="absolute search-icon" style="top: 0.375rem;left: 1.75rem;">
-                        <svg class="fill-current pointer-events-none text-grey-darkest w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                        </svg>
-                    </div>
-                </div> --}}
+                @hasSection('search')
+                    @yield('search')
+                @endif
 
             </div>
 
@@ -181,6 +171,7 @@
                         </ul>
                     </div>
                 </div>  --}}
+
             </div>
 
 

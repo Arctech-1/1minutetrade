@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 
 class BankDetailController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'user', 'verified']);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(['auth', 'user', 'verified']);
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +32,7 @@ class BankDetailController extends Controller
      */
     public function create()
     {
-        //
+        return view('bankdetails.create');
     }
 
     /**
@@ -43,7 +43,13 @@ class BankDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $this->validateBankDetails($request);
+
+        $bankDetail = new BankDetail($this->validateBankDetails($request));
+        $bankDetail->user_id = Auth::user()->id;
+        $bankDetail->save();
+
+        return redirect()->route('bankdetail.index')->with('status','Bank details added successfully');
     }
 
     /**
@@ -63,9 +69,9 @@ class BankDetailController extends Controller
      * @param  \App\Models\BankDetail  $bankDetail
      * @return \Illuminate\Http\Response
      */
-    public function edit(BankDetail $bankDetail)
+    public function edit(BankDetail $bankDetail, $id)
     {
-        //
+        return view('bankdetails.edit', ['bankDetail' => $bankDetail->find($id)]);
     }
 
     /**
@@ -75,9 +81,11 @@ class BankDetailController extends Controller
      * @param  \App\Models\BankDetail  $bankDetail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BankDetail $bankDetail)
+    public function update(Request $request, BankDetail $bankDetail, $id)
     {
-        //
+        
+        $bankDetail->find($id)->update($this->validateBankDetails($request));
+        return redirect()->route('bankdetail.index')->with('status','Bank detail updated successfully');
     }
 
     /**
@@ -86,8 +94,21 @@ class BankDetailController extends Controller
      * @param  \App\Models\BankDetail  $bankDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BankDetail $bankDetail)
+    public function destroy(BankDetail $bankDetail, $id)
     {
-        //
+        $bankDetail->find($id)->delete();
+        return redirect()->route('bankdetail.index')->with('status','Bank detail deleted successfully');
+    }
+
+    // Validation Method to validate input data from forms
+    public function validateBankDetails($request)
+    {
+        $validatedData = $request->validate([
+            'name'         => ['required', 'string', 'max:255'],
+            'account_name' => ['required', 'string', 'max:255'],
+            'account_no'   => 'required |max:10',
+        ]);
+
+        return $validatedData;
     }
 }

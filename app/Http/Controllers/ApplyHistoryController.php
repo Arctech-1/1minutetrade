@@ -15,26 +15,20 @@ class ApplyHistoryController extends Controller
     //
     public function index(Request $request)
     {
-        /* Deleting the Request Withrawal by retrieving the value passed to the query parameter  */
-        if ($request->has('transaction')) {
-            # code...
-            $trans = Transaction::find($request->query('transaction'));
-            $trans->delete();
-            return redirect()->route('apply')->with('status','Withdrawal Request deleted successfully');
-        } 
-        else {
+
         // using eager loading to retrieve relationship data for Withdrawal requests
         $applyHistory = BankDetail::with(['transactions' => function($query){
             $query->where('user_id', Auth::user()->id)
                   ->where('status', 'pending')
-                  ->where('type', 'withdrawal');
-                  
+                  ->where('type', 'withdrawal')
+                  ->orderBy('created_at', 'desc');
+
         }])
         ->where('user_id', Auth::user()->id)
         ->get();
-        
+
         return view('apply', ['apply' => $applyHistory]);
-        }
+
     }
 
     // to display form and attach user Bank details
@@ -43,8 +37,7 @@ class ApplyHistoryController extends Controller
         $bankDetails = User::with(['bankDetails' => function ($query){
             $query->where('user_id', Auth::user()->id);
         }])->where('id', Auth::user()->id)->get();
-        
-        // dd($bankDetails);
+
         return view('applyWithdrawal', ['bankDetails' => $bankDetails]);
     }
 
@@ -58,22 +51,32 @@ class ApplyHistoryController extends Controller
         $transaction->type = 'withdrawal';
         $transaction->save();
 
-        return redirect()->route('apply')->with('status','Withdrawal Request sent successfully'); 
-        
+        return redirect()->route('apply')->with('status','Withdrawal Request sent successfully');
+
     }
 
-    public function deleteT(Request $request)
+    public function destroy(Request $request)
     {
-        
-        // Transaction::where('id', $id)->destroy();
-        //DB::delete('delete transaction where id = ?', [$id]);
-       // 
+
+        /* Deleting the Request Withrawal by retrieving the value passed to the query parameter  */
+        if ($request->has('id')) {
+            # code...
+            // return "hi";
+            $trans = Transaction::find($request->query('id'))
+            ->where('user_id', Auth::user()->id)
+            ->where('type', 'withdrawal')
+            ->where('status', 'pending');
+            $trans->delete();
+            return redirect()->route('apply')->with('deleteStatus','Withdrawal Application deleted successfully');
+        }
     }
 
     protected function validateWithdrawal($request)
     {
+
+       $maxValue = Auth::user()->account_balance;
        $validatedData =  $request->validate([
-            'amount' => 'required',
+            'amount' => ['required', 'numeric', 'min:1000', 'max:'. $maxValue, ]
         ]);
         return $validatedData;
     }

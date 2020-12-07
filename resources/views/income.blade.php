@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
-        
+
         <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 py-3  rounded-bl-lg rounded-br-lg">
             <table class="min-w-full">
                 <thead>
@@ -24,33 +24,33 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                            <div class="text-sm leading-5 text-blue-900">₦{{Auth::user()->account_balance}}</div>
+                            <div class="text-sm leading-5 text-blue-900">₦{{$income->balance}}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{$income->created_at}}</td>
-                    </tr>     
+                    </tr>
                     @empty
                     <tr>
-                        <div> No data available </div>
-                    </tr>         
-                    
+                        <div class="py-5"> No data available </div>
+                    </tr>
+
                     @endforelse
-                             
+
                 </tbody>
             </table>
         <div class="sm:flex-1 sm:flex sm:items-center sm:justify-between mt-4 work-sans">
             <div>
-            
+
             </div>
             <div>
             <nav class="relative z-0 inline-flex shadow-sm">
-                <div>
+                <div class=" flex-row">
                     {{ $incomeHistory->links() }}
                 </div>
-                
+
             </nav>
             </div>
         </div>
-        
+
         </div>
     </div>
 @endsection

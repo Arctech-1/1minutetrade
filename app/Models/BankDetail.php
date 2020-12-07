@@ -9,10 +9,14 @@ class BankDetail extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = ['name', 'account_name', 'account_no'];
+
      /* Relationship Function to retrieve related data from User model  */
      public function user()
      {
          return $this->belongsTo(User::class);
+         
      }
 
      public function transactions()

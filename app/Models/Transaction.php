@@ -11,7 +11,7 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['amount'];
+    protected $fillable = ['amount', 'payment_screenshot_path', 'status', 'balance'];
 
     /* Relationship Function to retrieve related data from User model  */
     public function user()

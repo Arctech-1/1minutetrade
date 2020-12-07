@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<main class="sm:container sm:mx-auto sm:max-w-lg sm:mt-10">
+<main class=" mx-3 mt-20 sm:container sm:mx-auto sm:max-w-lg sm:mt-10">
     <div class="flex">
-        <div class="w-full">
+        <div class="w-full mt-12">
             <section class="flex flex-col break-words bg-white sm:border-1 sm:rounded-md sm:shadow-sm sm:shadow-lg">
 
                 <header class="font-semibold bg-gray-200 text-gray-700 py-5 px-6 sm:py-6 sm:px-8 sm:rounded-t-md">
                     {{ __('Login') }}
                 </header>
 
-                <form class="w-full px-6 space-y-6 sm:px-10 sm:space-y-8" method="POST" action="{{ route('login') }}">
+                <form class="w-full px-6 space-y-6 sm:px-10 sm:space-y-8" method="POST" action="{{ route('login') }}" >
                     @csrf
 
                     <div class="flex flex-wrap">
@@ -66,10 +66,14 @@
                             {{ __('Login') }}
                         </button>
 
+                        <div class="w-auto w-full flex justify-center">
+                            <div class="w-10 h-10 m-3 border-2 border-purple-600 rounded-full loader"> </div>
+                        </div>
+
                         @if (Route::has('register'))
                         <p class="w-full text-xs text-center text-gray-700 my-6 sm:text-sm sm:my-8">
                             {{ __("Don't have an account?") }}
-                            <a class="text-blue-500 hover:text-blue-700 no-underline hover:underline" href="{{ route('register') }}">
+                            <a class="text-blue-500 hover:text-blue-700 no-underline hover:underline" id="btn-one" href="{{ route('register') }}">
                                 {{ __('Register') }}
                             </a>
                         </p>

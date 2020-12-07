@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -9,6 +10,9 @@ use App\Http\Controllers\IncomeHistoryController;
 use App\Http\Controllers\OutcomeHistoryController;
 use App\Http\Controllers\ApplyHistoryController;
 use App\Http\Controllers\BankDetailController;
+//use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Models\Transaction;
 use GuzzleHttp\Psr7\Request;
 
 /*
@@ -30,33 +34,72 @@ use GuzzleHttp\Psr7\Request;
 Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
+
     return view('auth.login');
+
 });
 
 
-/* User Routes */
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/income', [IncomeHistoryController::class, 'index'])->name('income')->middleware(['auth', 'user']);
+Route::middleware(['auth', 'user', 'verified'])->group(function () {
 
-Route::get('/outcome', [OutcomeHistoryController::class, 'index'])->name('outcome')->middleware(['auth', 'user']);
+    /* User Routes */
 
-Route::get('/apply', [ApplyHistoryController::class, 'index'])->name('apply')->middleware(['auth', 'user']);
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/apply/create', [ApplyHistoryController::class, 'create'])->name('withdraw')->middleware(['auth', 'user']);
+    Route::get('/income', [IncomeHistoryController::class, 'index'])->name('income');
 
-Route::post('/apply/store', [ApplyHistoryController::class, 'store'])->name('withdraw.submit')->middleware(['auth', 'user']);
+    Route::get('/outcome', [OutcomeHistoryController::class, 'index'])->name('outcome');
 
-//Route::get('/apply/{$id}', [ApplyHistoryController::class, 'deleteT'])->name('withdraw.delete')->middleware(['auth', 'user']);
+    Route::get('/apply', [ApplyHistoryController::class, 'index'])->name('apply');
 
-/* Resource Route for Bank Details CRUD */
-Route::resource('bankdetail', BankDetailController::class);
+    Route::get('/apply/create', [ApplyHistoryController::class, 'create'])->name('withdraw');
+
+    Route::post('/apply/store', [ApplyHistoryController::class, 'store'])->name('withdraw.submit');
+
+    Route::get('/apply/delete/', [ApplyHistoryController::class, 'destroy'])->name('withdraw.delete');
+
+    /* Resource Route for Bank Details CRUD */
+    Route::resource('bankdetail', BankDetailController::class);
+
+});
+
+ /* Route resource for user profile */
+ Route::resource('profile', UserController::class);
 
 
 /* Admin Routes */
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+
+
+Route::prefix('admin')->group(function () {
+
+    Route::get('/profile/{id}', [UserController::class, 'editAdmin'])->name('admin.profile');
+
+    Route::match(['put', 'patch'], '/profile/{id}', [UserController::class, 'updateAdminProfile'])->name('adminProfile.update');
+
+    Route::resource('users', UserController::class);
+
+    Route::post('users/search', [UserController::class, 'searchUsers'])->name('user.search');
+
+    // route to credit the user account
+    Route::post('users/{id}', [UserController::class, 'creditUser'])->name('user.credit');
+
+
+
+
+    // Transaction route
+    Route::resource('transactions', TransactionController::class);
+
+    Route::get('/withdrawal-requests', [TransactionController::class, 'withdrawalIndex'])->name('withdrawal.request');
+
+
+
+});
+
 
 
 

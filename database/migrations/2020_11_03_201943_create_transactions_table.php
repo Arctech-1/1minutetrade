@@ -15,11 +15,13 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2);
             $table->enum('type', ['credit', 'withdrawal']);
             $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->decimal('balance', 15, 2)->default(0.00);
             $table->text('payment_screenshot_path')->nullable();
+            $table->foreignId('bank_id')->nullable()->constrained('bank_details');
             $table->timestamps();
         });
     }

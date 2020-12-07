@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<main class="sm:container sm:mx-auto sm:max-w-lg sm:mt-10">
+<main class="mx-3 mt-20 sm:container sm:mx-auto sm:max-w-lg sm:mt-10">
     <div class="flex">
-        <div class="w-full">
+        <div class="w-full mt-12">
 
             @if (session('resent'))
             <div class="text-sm border border-t-8 rounded text-green-700 border-green-600 bg-green-100  px-3 py-4 mb-4"
@@ -25,13 +25,18 @@
                     <p>
                         {{ __('If you did not receive the email') }}, <a
                             class="text-blue-500 hover:text-blue-700 no-underline hover:underline cursor-pointer"
-                            onclick="event.preventDefault(); document.getElementById('resend-verification-form').submit();">{{ __('click here to request another') }}</a>.
+                            onclick="event.preventDefault(); document.getElementById('resend-verification-form').submit(); $('.loader').show();">{{ __('click here to request another') }}</a>.
                     </p>
+                    <div class="w-auto w-full flex justify-center">
+                        <div class="w-10 h-10 m-3 border-2 border-purple-600 rounded-full loader"> </div>
+                    </div>
 
                     <form id="resend-verification-form" method="POST" action="{{ route('verification.resend') }}"
                         class="hidden">
                         @csrf
+
                     </form>
+
                 </div>
 
             </section>

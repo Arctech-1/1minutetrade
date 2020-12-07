@@ -15,9 +15,10 @@ class CreateBankDetailsTable extends Migration
     {
         Schema::create('bank_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->unsignedSmallInteger('account_no')->unique();
+            $table->string('account_name');
+            $table->string('account_no', 10)->unique();
             $table->timestamps();
         });
     }
